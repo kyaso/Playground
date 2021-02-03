@@ -1,18 +1,12 @@
 from random import randint
 from sha256 import *
+from common import string_to_bytes
 
 def gen_random_msg(len):
     """
     Generate a list of `len` random bytes.
     """
     return [randint(0,256)  for i in range(len)]
-
-def string_to_bytes(str):
-    b = []
-    for char in str:
-        b.append(ord(char))
-    
-    return b
 
 def test_pad_msg():
     msg = [0xde, 0xad, 0xbe, 0xef]
@@ -63,6 +57,7 @@ def test_sha256():
     h = sha256(msg)
     assert h == 0xcf5b16a778af8380036ce59e7b0492370b249b11e8f07a51afac45037afee9d1
 
+    # 1024 bit message
     msg = string_to_bytes("9l5mXBb7Lprxjzb62CEvl2rBWGoFa5dmE45TmMFPQyjgM4wgZy2rmAK51sSCAAzcw5bw1S4k5MG8PZJr1lr6ZPdjPIzhHZnH79qvLcbBPFbkgF8l1HCL9FNKQMJ8aqyl")
     h = sha256(msg)
     assert h == 0x60342523c09563657e7063cb2ec72dd32bf57318c18e6410eb7a538b63906250
