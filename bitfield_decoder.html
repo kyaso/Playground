@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bit Field Decoder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /*height: 100vh;*/
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            margin-top: 10px;
+            display: block;
+        }
+
+        textarea, input {
+            width: 100%;
+            padding: 8px;
+            margin: 5px 0 15px 0;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Bit Field Decoder</h1>
+        <label for="layoutInput">Bit Field Layout (JSON):</label>
+        <textarea id="layoutInput" rows="10"></textarea>
+        <label for="hexInput">Hex Value:</label>
+        <input type="text" id="hexInput" />
+        <button onclick="decode()">Decode</button>
+        <div id="result"></div>
+        <script>
+            function decode() {
+                const layoutInput = document.getElementById('layoutInput').value;
+                const hexInput = document.getElementById('hexInput').value;
+
+                try {
+                    const layout = JSON.parse(layoutInput);
+                    const hexValue = BigInt(hexInput);  // Convert hex string to BigInt
+
+                    let resultHTML = '<h3>Decoded Values:</h3>';
+
+                    layout.forEach(field => {
+                        const mask = ((1n << (BigInt(field.end) - BigInt(field.start) + 1n)) - 1n) << BigInt(field.start);
+                        const value = (hexValue & mask) >> BigInt(field.start);
+                        resultHTML += `<p><b>${field.name}</b>: 0x${value.toString(16)}</p>`;
+                    });
+
+                    document.getElementById('result').innerHTML = resultHTML;
+                } catch (error) {
+                    document.getElementById('result').innerHTML = '<p style="color: red;">Error decoding bit fields. Please check your input.</p>';
+                }
+            }
+        </script>
+    </div>
+</body>
+</html>
