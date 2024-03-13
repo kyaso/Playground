@@ -65,7 +65,7 @@
         <script>
             function decode() {
                 const layoutInput = document.getElementById('layoutInput').value;
-                const hexInput = document.getElementById('hexInput').value;
+                const hexInput = document.getElementById('hexInput').value.replace(/_/g, '');
 
                 try {
                     const layout = JSON.parse(layoutInput);
